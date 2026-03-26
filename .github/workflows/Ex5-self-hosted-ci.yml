@@ -10,7 +10,7 @@ on:
 jobs:
 
   # --------------------------------------
-  # ✅ BUILD JOB
+  #  BUILD JOB
   # --------------------------------------
   build:
     name: Build API
@@ -27,7 +27,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
   # --------------------------------------
-  # ✅ TEST JOB
+  #  TEST JOB
   # --------------------------------------
   test:
     name: Run tests
@@ -52,7 +52,7 @@ jobs:
           pytest -q
 
   # --------------------------------------
-  # ✅ LINT JOB
+  #  LINT JOB
   # --------------------------------------
   lint:
     name: Lint code
@@ -76,7 +76,7 @@ jobs:
           flake8 . --exclude=.venv --max-line-length=120
 
   # --------------------------------------
-  # ✅ DOCKER BUILD & PUSH
+  #  DOCKER BUILD & PUSH
   # --------------------------------------
   docker:
     name: Docker login, build & push
@@ -99,7 +99,7 @@ jobs:
           docker push "$IMAGE"
 
   # --------------------------------------
-  # ✅ DEPLOY USING DOCKER COMPOSE
+  #  DEPLOY USING DOCKER COMPOSE
   # --------------------------------------
   deploy:
     name: Deploy using Docker Compose
@@ -113,7 +113,7 @@ jobs:
 
       - name: Docker login
         run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Start containers using Docker Compose
         run: |
