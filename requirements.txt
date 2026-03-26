@@ -1,0 +1,11 @@
+Flask>=3.0
+Flask-SQLAlchemy>=3.1
+SQLAlchemy>=2.0
+pytest>=8.0
+psycopg2-binary
+
+
+#docker, Make, docker-compose cant be written here bcz
+# here we list only python packages.
+# check system-requirements.md file for more.
+
