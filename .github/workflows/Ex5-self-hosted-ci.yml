@@ -91,8 +91,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Debug secrets
         run: |
-            echo "Username: ${{ secrets.DOCKER_USERNAME }}"
-            echo "Password length: ${#${{ secrets.DOCKER_TOKEN }}}"
+          echo "Username: ${{ secrets.DOCKER_USERNAME }}"
+          echo "Password length: ${{ secrets.DOCKER_TOKEN }}"
             
       - name: Docker login
         run: |
