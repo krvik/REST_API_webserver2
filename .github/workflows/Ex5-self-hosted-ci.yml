@@ -9,9 +9,6 @@ on:
 
 jobs:
 
-  # --------------------------------------
-  #  BUILD JOB
-  # --------------------------------------
   build:
     name: Build API
     runs-on: self-hosted
@@ -26,9 +23,6 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-  # --------------------------------------
-  #  TEST JOB
-  # --------------------------------------
   test:
     name: Run tests
     runs-on: self-hosted
@@ -48,12 +42,8 @@ jobs:
       - name: Pytest
         run: |
           . .venv/bin/activate
-          export PYTHONPATH=api
           pytest -q
 
-  # --------------------------------------
-  #  LINT JOB
-  # --------------------------------------
   lint:
     name: Lint code
     runs-on: self-hosted
@@ -72,12 +62,8 @@ jobs:
       - name: Run flake8
         run: |
           . .venv/bin/activate
-          export PYTHONPATH=api
           flake8 . --exclude=.venv --max-line-length=120
-
-  # --------------------------------------
-  #  DOCKER BUILD & PUSH
-  # --------------------------------------
+          
   docker:
     name: Docker login, build & push
     runs-on: self-hosted
@@ -88,12 +74,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Debug secrets
-        run: |
-          echo "Username: '${{ secrets.DOCKER_USERNAME }}'"
-         
-          echo "Token (masked): '${{ secrets.DOCKER_TOKEN }}'"
-
       - name: Docker login
         run: |
           echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
@@ -103,16 +83,10 @@ jobs:
           IMAGE="${{ secrets.DOCKER_USERNAME }}/rest_api_webserver:latest"
           docker build -t "$IMAGE" .
           docker push "$IMAGE"
-    
-  
-
-  # --------------------------------------
-  #  DEPLOY USING DOCKER COMPOSE
-  # --------------------------------------
   deploy:
     name: Deploy using Docker Compose
     runs-on: self-hosted
-    needs: docker
+    needs: docker   # only run after docker image build & push job
 
     if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
 
@@ -121,10 +95,11 @@ jobs:
 
       - name: Docker login
         run: |
-          echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Start containers using Docker Compose
         run: |
           docker compose down
-          docker compose pull
+          docker compose pull        # pulls latest image from DockerHub
           docker compose up -d --build
+    
