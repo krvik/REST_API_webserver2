@@ -1,8 +1,6 @@
 from flask import Flask
 from api.src.extensions import db
-from api.src.routes.students_v1 import students_v1
-from api.src.routes.students_v2 import students_v2
-from api.src.routes.students_legacy import students_legacy
+from api.src.routes import students_v1, students_v2, students_legacy
 
 import os
 
