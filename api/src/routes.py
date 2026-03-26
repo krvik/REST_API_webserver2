@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
-from src.extensions import db
-from src.models import Student
+from api.src.extensions import db
+from api.src.models import Student
 
 
 def create_blueprint(name, version=None):
