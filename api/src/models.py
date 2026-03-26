@@ -1,5 +1,5 @@
 from datetime import datetime
-from src.extensions import db
+from api.src.extensions import db
 
 
 class Student(db.Model):
