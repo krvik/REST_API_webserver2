@@ -70,7 +70,7 @@ jobs:
     needs: [test, lint]
 
     if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-
+    
     steps:
       - uses: actions/checkout@v4
       - name: Dedug secrets
